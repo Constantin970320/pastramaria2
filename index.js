@@ -1,14 +1,10 @@
 
+const produse = {'Mancare': [{'name': 'Pastrana Oaie', 'price': 35}, {'name': 'Pastrama Porc', 'price': 30}, {'name': 'Pastrama Pui', 'price': 30}, {'name': 'Carnati de plescoi', 'price': 25}, {'name': 'Mici cu mustar', 'price': 6}, {'name': 'Meniu stripsuri', 'price': 22}, {'name': 'Ceafa de Porc', 'price': 22}, {'name': 'Cartofi prajiti', 'price': 8}, {'name': 'Cartofi prajiti cu branza rasa', 'price': 12}, {'name': 'Legume la gratar', 'price': 15}, {'name': 'Mujdei de usturoi', 'price': 3}, {'name': 'Salata de muraturi', 'price': 8}, {'name': 'Sos Ketchup/Mustar', 'price': 3}, {'name': 'Paine/Chifla', 'price': 3}, {'name': 'Mamaliga', 'price': 5}, {'name': 'Platou de 2 persoane', 'price': 100}, {'name': 'Platou de 4 persoane', 'price': 200}], 'Bauturi': [{'name': 'Apa plata', 'price': 6}, {'name': 'Apa minerala', 'price': 6}, {'name': 'Cola', 'price': 10}, {'name': 'Cola 0', 'price': 10}, {'name': 'Fanta', 'price': 10}, {'name': 'Nestea', 'price': 10}, {'name': 'Limonada', 'price': 10}, {'name': 'Birra Moretti 0.5', 'price': 9}, {'name': 'Birra Moretti 0,33 0 alcool', 'price': 9}, {'name': 'Heineken 0.4', 'price': 11}, {'name': 'Heineken 0.33 0 alcool', 'price': 12}, {'name': 'Ciuc premium', 'price': 8}, {'name': 'Desperados', 'price': 12}, {'name': 'Cidru de mere 0.33', 'price': 10}, {'name': 'Cafea simpla/cu lapte', 'price': 7}, {'name': 'Ceai', 'price': 7}, {'name': 'Ciocolata calda', 'price': 7}], 'Deserturi': [{'name': 'Inghetata 100gr div. sort.', 'price': 10}, {'name': 'Ecler Vanilie/Ciocolata/Caramel', 'price': 12}]};
+
 const app = document.getElementById("app");
 
 let masa = null;
 let comanda = [];
-
-const produse = [
-  { name: "Pastrama Porc", price: 30 },
-  { name: "Cartofi prajiti cu branza", price: 12 },
-  { name: "Desperados", price: 12 }
-];
 
 function render() {
   app.innerHTML = "";
@@ -36,16 +32,31 @@ function render() {
   h2.textContent = "Masa " + masa;
   app.appendChild(h2);
 
-  produse.forEach((p, idx) => {
-    const btn = document.createElement("button");
-    btn.textContent = `${p.name} - ${p.price} LEI`;
-    btn.style.margin = "5px";
-    btn.onclick = () => {
-      comanda.push(p);
-      saveComanda();
-      render();
-    };
-    app.appendChild(btn);
+  const changeBtn = document.createElement("button");
+  changeBtn.textContent = "Schimbă masa";
+  changeBtn.onclick = () => {
+    saveComanda();
+    masa = null;
+    render();
+  };
+  changeBtn.style.marginBottom = "10px";
+  app.appendChild(changeBtn);
+
+  Object.entries(produse).forEach(([categorie, lista]) => {
+    const h3 = document.createElement("h3");
+    h3.textContent = categorie;
+    app.appendChild(h3);
+    lista.forEach(p => {
+      const btn = document.createElement("button");
+      btn.textContent = `${p.name} - ${p.price} LEI`;
+      btn.style.margin = "4px";
+      btn.onclick = () => {
+        comanda.push(p);
+        saveComanda();
+        render();
+      };
+      app.appendChild(btn);
+    });
   });
 
   const list = document.createElement("ul");
@@ -83,7 +94,6 @@ function render() {
   resetBtn.textContent = "Resetează masa";
   resetBtn.onclick = () => {
     if (confirm("Ești sigur că vrei să resetezi această masă?")) {
-      masa = null;
       comanda = [];
       saveComanda();
       render();
